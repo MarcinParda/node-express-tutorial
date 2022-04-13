@@ -1,26 +1,18 @@
 const express = require("express");
 const app = express();
 
-const morgan = require("morgan");
+const people = require("./routes/people");
+const auth = require("./routes/auth");
 
-app.use(morgan("tiny"));
+// static assets
+app.use(express.static("./methods-public"));
+// parse form data
+app.use(express.urlencoded({ extended: false }));
+// parse json
+app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Home");
-});
-
-app.get("/about", (req, res) => {
-  res.send("About");
-});
-
-app.get("/api/products", (req, res) => {
-  res.send("Products");
-});
-
-app.get("/api/items", (req, res) => {
-  console.log(req.user);
-  res.send("Items");
-});
+app.use("/api/people", people);
+app.use("/login", auth);
 
 app.listen(5000, () => {
   console.log("Server is listening on port 5000....");
